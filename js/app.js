@@ -190,15 +190,12 @@ var Player = function() {
   this.y = 300;
   this.width = 67;
   this.height = 88;
-
-  //this.area = {this.x, this.y, this.width, this.height}
 }
 
 Player.prototype = Object.create(Character.prototype);
 Player.prototype.constructor = Player;
 
 Player.prototype.update = function(dt) {
-  //Player.x = Player.x.clamp(0, CANVAS_WIDTH - Player.width);
 
   for (i in allEnemies) {
    if (player.x < allEnemies[i].x + allEnemies[i].width &&
@@ -208,18 +205,6 @@ Player.prototype.update = function(dt) {
       this.reset();
     }
   }
- 
-/*
-  for(i in allEnemies) {
-    if (Enemy.area.x)
-
-    /*
-    if (COLLIDES(Enemy, Player)) {
-      this.reset();
-    }
-  }
-  */
-
 }
 
 /*
@@ -262,7 +247,7 @@ Player.prototype.reset = function() {
 // Place the player object in a variable called player
 
 var player = new Player();
-var allEnemies = [new Enemy(), new Enemy()];
+var allEnemies = [new Enemy(), new Enemy(), new Enemy(), new Enemy()];
 
 
 
