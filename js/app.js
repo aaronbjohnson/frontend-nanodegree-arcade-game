@@ -125,7 +125,6 @@ Enemy.prototype.inBounds = function() {
 Enemy.prototype.update = function(dt) {
 
   this.x += this.xVelocity * dt * 100;
-  console.log(this.x);
   this.y += this.yVelocity * dt * 100;
 
   if (this.x > CANVAS_WIDTH) {
@@ -201,6 +200,15 @@ Player.prototype.constructor = Player;
 Player.prototype.update = function(dt) {
   //Player.x = Player.x.clamp(0, CANVAS_WIDTH - Player.width);
 
+  for (i in allEnemies) {
+   if (player.x < allEnemies[i].x + allEnemies[i].width &&
+    player.x + player.width > allEnemies[i].x &&
+    player.y < allEnemies[i].y + allEnemies[i].height &&
+    player.height + player.x > allEnemies[i].y) {
+      this.reset();
+    }
+  }
+ 
 /*
   for(i in allEnemies) {
     if (Enemy.area.x)
@@ -211,7 +219,6 @@ Player.prototype.update = function(dt) {
     }
   }
   */
-  
 
 }
 
