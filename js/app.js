@@ -201,7 +201,7 @@ Player.prototype.update = function(dt) {
    if (player.x < allEnemies[i].x + allEnemies[i].width &&
     player.x + player.width > allEnemies[i].x &&
     player.y < allEnemies[i].y + allEnemies[i].height &&
-    player.height + player.x > allEnemies[i].y) {
+    player.height + player.y > allEnemies[i].y) {
       this.reset();
     }
   }
