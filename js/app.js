@@ -2,6 +2,8 @@ var PLAYER_START_X = 200,
     PLAYER_START_Y = 300, 
     STRIDE_LENGTH_X = 101,
     STRIDE_LENGTH_Y = 83;
+    PLAYER_X_OFFSET = (17);
+    PLAYER_Y_OFFSET = (41.5);
 
 var SAFE_ZONE = 83,
     LEFT_WALL = -5,
@@ -9,8 +11,9 @@ var SAFE_ZONE = 83,
     TOP_WALL = -100,
     BOTTOM_WALL = 450;
 
-var ENEMY_X_STARTS = [-300, -200, -100, -50],
-    ENEMY_Y_STARTS = [60, 140, 225],
+var ENEMY_Y_OFFSET = (80);
+    ENEMY_X_STARTS = [-300, -200, -100, -50],
+    ENEMY_Y_STARTS = [(60 + ENEMY_Y_OFFSET), (140 + ENEMY_Y_OFFSET), (225 + ENEMY_Y_OFFSET)],
     ENEMY_MAX_SPEED = 5,
     ENEMY_MIN_SPEED = 1,
     ENEMY_FRAME = {
@@ -24,12 +27,7 @@ var SPEED_VARIATION = function() {
   return getRandomInt(ENEMY_MIN_SPEED, ENEMY_MAX_SPEED);
 }
 
-var COLLIDES = function(a, b) {
-  return a.x < b.x + b.width &&
-    a.x + a.width > b.x &&
-    a.y < b.y + b.height &&
-    a.y + a.height > b.y;
-}
+
 
 // Adding a function to detect collisions. Referenced: http://www.html5rocks.com/en/tutorials/canvas/notearsgame/
 
@@ -95,14 +93,14 @@ var Enemy = function() {
   this.yVelocity = 0;
 
   this.width = 99;
-  this.height = 77;
+  this.height = 30;
 
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
 
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
-  this.sprite = 'images/enemy-bug.png';
+  this.sprite = 'images/enemy-bugA.png';
   this.x = this.getRandomX();
   this.y = this.getRandomY();
 
@@ -185,9 +183,9 @@ Enemy.prototype.getRandomY = function() {
 // a handleInput() method.
 
 var Player = function() {
-  this.sprite = 'images/char-boy.png';
-  this.x = 200;
-  this.y = 300;
+  this.sprite = 'images/char-boyA.png';
+  this.x = (STRIDE_LENGTH_X * 2) + PLAYER_X_OFFSET;
+  this.y = (STRIDE_LENGTH_Y * 4) + PLAYER_Y_OFFSET;
   this.width = 67;
   this.height = 88;
 }
@@ -197,25 +195,29 @@ Player.prototype.constructor = Player;
 
 Player.prototype.update = function(dt) {
 
+  var collides = this.handleCollisions();
+
+  if (collides) {
+    this.reset();
+  }
+
+}
+
+
+Player.prototype.handleCollisions = function() {
+  
   for (i in allEnemies) {
    if (player.x < allEnemies[i].x + allEnemies[i].width &&
     player.x + player.width > allEnemies[i].x &&
     player.y < allEnemies[i].y + allEnemies[i].height &&
     player.height + player.y > allEnemies[i].y) {
-      this.reset();
+      return true;
     }
   }
+
+  return false;
 }
 
-/*
-Player.prototype.handleCollisions = function() {
-  Enemy.forEach(function(Enemy)) {
-    if (collides(Enemy, Player)) {
-      Player.reset();
-    }
-  }
-}
-*/
 
 Player.prototype.handleInput = function(keydown) {
   switch(keydown) {
@@ -237,8 +239,8 @@ Player.prototype.handleInput = function(keydown) {
 }
 
 Player.prototype.reset = function() {
-  this.x = 200;
-  this.y = 300;
+  this.x = (STRIDE_LENGTH_X * 2) + PLAYER_X_OFFSET;
+  this.y = (STRIDE_LENGTH_Y * 4) + PLAYER_Y_OFFSET;
 }
 
 
