@@ -153,6 +153,8 @@ var Engine = (function(global) {
         });
 
         player.render();
+
+        healthPack.render();
     }
 
     /* This function does nothing but it could have been a good place to
@@ -176,7 +178,11 @@ var Engine = (function(global) {
         'images/enemy-bugA.png',
         'images/char-boyA.png', 
         'images/laser.png',
-        'images/Heart.png'
+        'images/Heart.png',
+        'images/robot1.png',
+        'images/robot2.png',
+        'images/robot3.png',
+        'images/health-pack.png'
     ]);
     Resources.onReady(init);
 

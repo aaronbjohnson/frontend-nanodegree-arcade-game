@@ -23,9 +23,23 @@ var ENEMY_Y_OFFSET = 80;
         "sprite height": 170 
     }
 
+var HEALTH_X_STARTS = [34, 135, 236, 337, 438],
+    HEALTH_Y_STARTS = 30;
+
 var SPEED_VARIATION = function() {
   return getRandomInt(ENEMY_MIN_SPEED, ENEMY_MAX_SPEED);
 }
+
+var gameOver = function() {
+  allEnemies = [];
+  ctx.fillStyle = "#111111";
+  ctx.font = "Bold 18px Helvetica";
+  ctx.fillText("Game Over, you reached level " + this.level, 15, 575);
+  healthPack = 0;
+}
+
+var speedMultiplier = 1;
+
 
 
 // Adding a function to detect collisions. Referenced: http://www.html5rocks.com/en/tutorials/canvas/notearsgame/
@@ -73,12 +87,6 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-var Status = function() {
-  this.health = 3;
-  this.level = 1;
-
-}
-
 
 
 //Create a super class called Character.
@@ -94,7 +102,7 @@ Character.prototype.render = function() {
 // Enemies our player must avoid
 var Enemy = function() {
   this.active = true;
-  this.xVelocity = SPEED_VARIATION();
+  this.xVelocity = 2;
   this.yVelocity = 0;
 
   this.width = 99;
@@ -131,7 +139,7 @@ Enemy.prototype.inBounds = function() {
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
 
-  this.x += this.xVelocity * dt * 100;
+  this.x += this.xVelocity * dt * 100 + speedMultiplier;
   this.y += this.yVelocity * dt * 100;
 
   if (this.x > CANVAS_WIDTH) {
@@ -192,7 +200,7 @@ Enemy.prototype.getRandomY = function() {
 // a handleInput() method.
 
 var Player = function() {
-  this.sprite = 'images/char-boyA.png';
+  this.sprite = 'images/robot3.png';
   this.x = (STRIDE_LENGTH_X * 2) + PLAYER_X_OFFSET;
   this.y = (STRIDE_LENGTH_Y * 4) + PLAYER_Y_OFFSET;
   this.width = 67;
@@ -231,9 +239,27 @@ Player.prototype.update = function(dt) {
     this.health--;
   }
 
+  var healthCollected = this.healthPackCollection();
+
+  if (healthCollected) {
+    this.health++;
+    healthPack.reset();
+  }
+
   if (this.health == 0) {
     this.sprite ='images/enemy-bugA.png';
     gameOver();
+  }
+
+  switch (this.health) {
+    case 1:
+      this.sprite = 'images/robot1.png';
+      break;
+    case 2:
+      this.sprite = 'images/robot2.png';
+      break;
+    default:
+    break;
   }
 
   var safe = this.safeZone();
@@ -241,8 +267,8 @@ Player.prototype.update = function(dt) {
   if (safe && this.health > 0) {
     this.reset();
     this.level++;
+    speedMultiplier++;
   }
-
 
 }
 
@@ -262,6 +288,19 @@ Player.prototype.handleCollisions = function() {
     player.y < allEnemies[i].y + allEnemies[i].height &&
     player.height + player.y > allEnemies[i].y) {
       return true;
+    }
+  }
+
+  return false;
+}
+
+Player.prototype.healthPackCollection = function() {
+  for (i in healthPack) {
+    if (player.x < healthPack.x + healthPack.width &&
+      player.x + player.width > healthPack.x &&
+      player.y < healthPack.y + healthPack.height &&
+      player.height + player.y > healthPack.y) {
+        return true;
     }
   }
 
@@ -311,13 +350,47 @@ Player.prototype.reset = function() {
   this.y = (STRIDE_LENGTH_Y * 4) + PLAYER_Y_OFFSET;
 }
 
+var Repair = function() {
+  this.sprite = 'images/health-pack.png';
+  this.x = this.getRandomX();
+  this.y = 151;
+  this.width = 33;
+  this.height = 29;
+}
+
+Repair.prototype = Object.create(Character.prototype);
+Repair.prototype.constructor = Player;
+
+Repair.prototype.getRandomX = function() {
+    // Get valid random index for ENEMY_X_STARTS array
+    var len = HEALTH_X_STARTS.length;
+    var rand = getRandomInt(0, len);
+
+    return HEALTH_X_STARTS[rand];
+}
+
+Repair.prototype.render = function() {
+  Character.prototype.render.call(this);
+}
+
+Repair.prototype.update = function(dt) {
+  console.log(this.x);
+}
+
+Repair.prototype.reset = function() {
+  this.x = this.getRandomX();
+  this.y = 151;
+}
+
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 
+var healthPack = new Repair();
 var player = new Player();
 var allEnemies = [new Enemy(), new Enemy(), new Enemy(), new Enemy()];
+
 
 
 
