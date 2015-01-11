@@ -1,9 +1,9 @@
 var PLAYER_START_X = 200,
     PLAYER_START_Y = 300, 
     STRIDE_LENGTH_X = 101,
-    STRIDE_LENGTH_Y = 83;
-    PLAYER_X_OFFSET = (17);
-    PLAYER_Y_OFFSET = (41.5);
+    STRIDE_LENGTH_Y = 83,
+    PLAYER_X_OFFSET = 17,
+    PLAYER_Y_OFFSET = 41.5;
 
 var SAFE_ZONE = 83,
     LEFT_WALL = -5,
@@ -11,7 +11,7 @@ var SAFE_ZONE = 83,
     TOP_WALL = -100,
     BOTTOM_WALL = 450;
 
-var ENEMY_Y_OFFSET = (80);
+var ENEMY_Y_OFFSET = 80;
     ENEMY_X_STARTS = [-300, -200, -100, -50],
     ENEMY_Y_STARTS = [(60 + ENEMY_Y_OFFSET), (140 + ENEMY_Y_OFFSET), (225 + ENEMY_Y_OFFSET)],
     ENEMY_MAX_SPEED = 5,
@@ -26,7 +26,6 @@ var ENEMY_Y_OFFSET = (80);
 var SPEED_VARIATION = function() {
   return getRandomInt(ENEMY_MIN_SPEED, ENEMY_MAX_SPEED);
 }
-
 
 
 // Adding a function to detect collisions. Referenced: http://www.html5rocks.com/en/tutorials/canvas/notearsgame/
@@ -74,6 +73,12 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
+var Status = function() {
+  this.health = 3;
+  this.level = 1;
+
+}
+
 
 
 //Create a super class called Character.
@@ -100,7 +105,7 @@ var Enemy = function() {
 
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
-  this.sprite = 'images/enemy-bugA.png';
+  this.sprite = 'images/laser.png';
   this.x = this.getRandomX();
   this.y = this.getRandomY();
 
@@ -110,8 +115,12 @@ var Enemy = function() {
     //Referenceing http://arcadegame2000.appspot.com/ for the speed system.
 }
 
-Enemy.prototype = Object.create(Character.prototype);
+Enemy.prototype = Object.create(Character.prototype); 
 Enemy.prototype.constructor = Enemy;
+
+Enemy.prototype.render = function() {
+  Character.prototype.render.call(this);
+}
 
 Enemy.prototype.inBounds = function() {
     return this.x >= 0 && this.x <= CANVAS_WIDTH && this.y >= 0 && this.y <=CANVAS_HEIGHT;
@@ -188,10 +197,30 @@ var Player = function() {
   this.y = (STRIDE_LENGTH_Y * 4) + PLAYER_Y_OFFSET;
   this.width = 67;
   this.height = 88;
+  this.health = 3;
+  this.level = 1;
 }
 
 Player.prototype = Object.create(Character.prototype);
 Player.prototype.constructor = Player;
+
+Player.prototype.render = function() {
+  Character.prototype.render.call(this);
+  if (this.health > 0) {
+    ctx.fillStyle = "#111111";
+    ctx.font = "Bold 18px Helvetica";
+    ctx.fillText("Level: " + this.level, 15, 575);
+    ctx.fillText("Health: " + this.health, 415, 575);
+  }
+
+  if (this.health == 0) {
+    ctx.fillStyle = "#111111";
+    ctx.font = "Bold 30px Helvetica";
+    ctx.fillText("GAME OVER", 155, 185);
+    ctx.fillText("You reached level " + this.level, 115, 265);
+  }
+  
+}
 
 Player.prototype.update = function(dt) {
 
@@ -199,10 +228,31 @@ Player.prototype.update = function(dt) {
 
   if (collides) {
     this.reset();
+    this.health--;
   }
+
+  if (this.health == 0) {
+    this.sprite ='images/enemy-bugA.png';
+    gameOver();
+  }
+
+  var safe = this.safeZone();
+
+  if (safe && this.health > 0) {
+    this.reset();
+    this.level++;
+  }
+
 
 }
 
+Player.prototype.safeZone = function() {
+  if (this.y < 50) {
+    return true;
+  }
+
+  return false;
+}
 
 Player.prototype.handleCollisions = function() {
   
@@ -219,8 +269,8 @@ Player.prototype.handleCollisions = function() {
 }
 
 
-Player.prototype.handleInput = function(keydown) {
-  switch(keydown) {
+Player.prototype.move = function(movement) {
+  switch(movement) {
     case 'left':
       this.x -= STRIDE_LENGTH_X;
       break;
@@ -235,6 +285,24 @@ Player.prototype.handleInput = function(keydown) {
       break;
     default:
       break;
+  }
+}
+//Referenced KevDonk's handleInput prototype to keep player in bounds
+Player.prototype.handleInput = function(keydown) {
+  if(keydown == 'right' && this.x < 400) {
+    this.move('right');
+  }
+
+  if(keydown == 'left' && this.x > 100) {
+    this.move('left');
+  }
+
+  if(keydown == 'down' && this.y < 400) {
+    this.move('down');
+  }
+
+  if(keydown == 'up' && this.y > 82) {
+    this.move('up');
   }
 }
 

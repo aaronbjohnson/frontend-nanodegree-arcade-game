@@ -112,8 +112,8 @@ var Engine = (function(global) {
                 'images/stone-block.png',   // Row 1 of 3 of stone
                 'images/stone-block.png',   // Row 2 of 3 of stone
                 'images/stone-block.png',   // Row 3 of 3 of stone
-                'images/grass-block.png',   // Row 1 of 2 of grass
-                'images/grass-block.png'    // Row 2 of 2 of grass
+                'images/stone-blockB.png',   // Row 1 of 2 of grass
+                'images/stone-blockA.png'    // Row 2 of 2 of grass
             ],
             numRows = 6,
             numCols = 5,
@@ -169,10 +169,14 @@ var Engine = (function(global) {
      */
     Resources.load([
         'images/stone-block.png',
+        'images/stone-blockA.png',
+        'images/stone-blockB.png',
         'images/water-block.png',
         'images/grass-block.png',
         'images/enemy-bugA.png',
-        'images/char-boyA.png'
+        'images/char-boyA.png', 
+        'images/laser.png',
+        'images/Heart.png'
     ]);
     Resources.onReady(init);
 
