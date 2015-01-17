@@ -1,3 +1,9 @@
+/**
+ * Variables used to globally store numbers and funnctions
+ * @type {number}
+ * @type {Array.<number>}
+ */
+
 var STRIDE_LENGTH_X = 101,
     STRIDE_LENGTH_Y = 83,
     PLAYER_X_OFFSET = 17,
@@ -11,25 +17,38 @@ var ENEMY_X_STARTS = [-300, -200, -100, -50],
 var HEALTH_X_STARTS = [34, 135, 236, 337, 438],
     HEALTH_Y_STARTS = 30;
 
+/**
+ * Returns a random number between Enemy's minimum and maximum
+ *    speeds.
+ */
 var SPEED_VARIATION = function() {
   return getRandomInt(ENEMY_MIN_SPEED, ENEMY_MAX_SPEED);
-}
+};
 
+/**
+ * Clears the game board of lasers and health packs.
+ */
 var gameOver = function() {
   allEnemies = [];
-  healthPack = 0;
-}
+  healthPack = false;
+};
 
+/**
+ * Global variable used to trigger an increase in laser velocity
+ *    when Player reaches a new level. 
+ */
 var speedMultiplier = 1;
 
-
-var CANVAS_WIDTH = 505;
-var CANVAS_HEIGHT = 606;
-
-//Utility 
+var CANVAS_WIDTH = 505,
+    CANVAS_HEIGHT = 606;
 
 
-//Used to generate random numbers. Source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+/**
+ * Returns a random integer between min (included) and max (excluded)
+ * Using Math.round() will give you a non-uniform distribution!
+ * Source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/
+ *     Reference/Global_Objects/Math/random
+ */
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
@@ -38,26 +57,26 @@ function getRandomInt(min, max) {
 
 //Create a super class called Character.
 var Character = function() {
- 
-}
+};
 
 Character.prototype.render = function() {
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
 
-// Enemies our player must avoid
+/**
+ * Create lasers that shoot across the screen. 
+ * @constructor
+ */
 var Enemy = function() {
   this.active = true;
   this.xVelocity = 2;
   this.yVelocity = 0;
-
   this.width = 99;
   this.height = 30;
-
   this.sprite = 'images/laser.png';
   this.x = this.getRandomX();
   this.y = this.getRandomY();
-}
+};
 
 Enemy.prototype = Object.create(Character.prototype); 
 Enemy.prototype.constructor = Enemy;
@@ -66,24 +85,18 @@ Enemy.prototype.render = function() {
   Character.prototype.render.call(this);
 }
 
-Enemy.prototype.inBounds = function() {
-    return this.x >= 0 && this.x <= CANVAS_WIDTH && this.y >= 0 && this.y <=CANVAS_HEIGHT;
-  }
-
-
-// Update the enemy's position, required method for game
-// Parameter: dt, a time delta between ticks
+/**
+ * Update the enemy's position, required method for game
+ * Parameter: dt, a time delta between ticks
+ */
 Enemy.prototype.update = function(dt) {
-
   this.x += this.xVelocity * dt * 100 + speedMultiplier;
   this.y += this.yVelocity * dt * 100;
 
   if (this.x > CANVAS_WIDTH) {
     this.reset();
   }
-
 }
-
 
 Enemy.prototype.reset = function() {
   this.x = this.getRandomX();
@@ -108,6 +121,10 @@ Enemy.prototype.getRandomY = function() {
     return ENEMY_Y_STARTS[rand];
 }
 
+/**
+* Create the Robot Hero that moves across the board.
+* @constructor
+*/
 var Player = function() {
   this.sprite = 'images/robot3.png';
   this.x = (STRIDE_LENGTH_X * 2) + PLAYER_X_OFFSET;
@@ -116,7 +133,7 @@ var Player = function() {
   this.height = 88;
   this.health = 3;
   this.level = 1;
-}
+};
 
 Player.prototype = Object.create(Character.prototype);
 Player.prototype.constructor = Player;
@@ -137,11 +154,9 @@ Player.prototype.render = function() {
     ctx.fillText("You reached level " + this.level, 115, 265);
     ctx.fillText("Refresh to reset", 138, 345);
   }
-  
 }
 
 Player.prototype.update = function(dt) {
-
   var collides = this.handleCollisions();
 
   if (collides) {
@@ -180,19 +195,16 @@ Player.prototype.update = function(dt) {
     this.level++;
     speedMultiplier++;
   }
-
 }
 
 Player.prototype.safeZone = function() {
   if (this.y < 50) {
     return true;
   }
-
   return false;
 }
 
 Player.prototype.handleCollisions = function() {
-  
   for (i in allEnemies) {
    if (player.x < allEnemies[i].x + allEnemies[i].width &&
     player.x + player.width > allEnemies[i].x &&
@@ -201,7 +213,6 @@ Player.prototype.handleCollisions = function() {
       return true;
     }
   }
-
   return false;
 }
 
@@ -214,7 +225,6 @@ Player.prototype.healthPackCollection = function() {
         return true;
     }
   }
-
   return false;
 }
 
@@ -261,13 +271,18 @@ Player.prototype.reset = function() {
   this.y = (STRIDE_LENGTH_Y * 4) + PLAYER_Y_OFFSET;
 }
 
+/**
+ * Create health packs the the Player can collect in order
+ *    add to the amount of lives remaining.
+ * @constructor
+ */
 var Repair = function() {
   this.sprite = 'images/health-pack.png';
   this.x = this.getRandomX();
   this.y = 151;
   this.width = 33;
   this.height = 29;
-}
+};
 
 Repair.prototype = Object.create(Character.prototype);
 Repair.prototype.constructor = Player;
@@ -297,11 +312,9 @@ var healthPack = new Repair();
 var player = new Player();
 var allEnemies = [new Enemy(), new Enemy(), new Enemy(), new Enemy()];
 
-
-
-
-// This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don't need to modify this.
+/** Listens for key presses and sends the keys to the
+ *      Player.handleInput() method.
+ */
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {
         37: 'left',
