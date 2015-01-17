@@ -108,7 +108,7 @@ var Engine = (function(global) {
          * for that particular row of the game level.
          */
         var rowImages = [
-                'images/water-block.png',   // Top row is water
+                'images/end-block.png',   // Top row is water
                 'images/stone-block.png',   // Row 1 of 3 of stone
                 'images/stone-block.png',   // Row 2 of 3 of stone
                 'images/stone-block.png',   // Row 3 of 3 of stone
@@ -173,12 +173,8 @@ var Engine = (function(global) {
         'images/stone-block.png',
         'images/stone-blockA.png',
         'images/stone-blockB.png',
-        'images/water-block.png',
-        'images/grass-block.png',
-        'images/enemy-bugA.png',
-        'images/char-boyA.png', 
+        'images/end-block.png',
         'images/laser.png',
-        'images/Heart.png',
         'images/robot1.png',
         'images/robot2.png',
         'images/robot3.png',
