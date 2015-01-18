@@ -2,6 +2,7 @@
  * Variables used to globally store numbers and funnctions
  * @type {number}
  * @type {Array.<number>}
+ * @const
  */
 
 var STRIDE_LENGTH_X = 101,
@@ -48,14 +49,15 @@ var CANVAS_WIDTH = 505,
  * Using Math.round() will give you a non-uniform distribution!
  * Source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/
  *     Reference/Global_Objects/Math/random
+ * @param {number} minimum value.
+ * @param {number} maximum value.
+ * @return {number}
  */
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-
-
-//Create a super class called Character.
+// Constructors
 var Character = function() {
 };
 
@@ -86,8 +88,8 @@ Enemy.prototype.render = function() {
 }
 
 /**
- * Update the enemy's position, required method for game
- * Parameter: dt, a time delta between ticks
+ * Update the enemy's position, required method for game.
+ * @param {number} dt is a time delta between ticks.
  */
 Enemy.prototype.update = function(dt) {
   this.x += this.xVelocity * dt * 100 + speedMultiplier;
@@ -98,15 +100,22 @@ Enemy.prototype.update = function(dt) {
   }
 }
 
+/**
+ * Resets the laser's position.
+ */
 Enemy.prototype.reset = function() {
   this.x = this.getRandomX();
   this.y = this.getRandomY();
   this.xVelocity = SPEED_VARIATION();
 }
 
-// Got this from Aracade2000 guy
+
+/**
+ * Referenced https://github.com/JColuch/Web-HTML5Game-FroggerClone
+ *    for this system of finding a random starting position for the 
+ *    lasers.
+ */
 Enemy.prototype.getRandomX = function() {
-    // Get valid random index for ENEMY_X_STARTS array
     var len = ENEMY_X_STARTS.length;
     var rand = getRandomInt(0, len);
 
@@ -114,7 +123,6 @@ Enemy.prototype.getRandomX = function() {
 }
 
 Enemy.prototype.getRandomY = function() {
-    // Get valid random index for ENEMY_Y_STARTS array
     var len = ENEMY_Y_STARTS.length;
     var rand = getRandomInt(0, len);
 
@@ -138,6 +146,10 @@ var Player = function() {
 Player.prototype = Object.create(Character.prototype);
 Player.prototype.constructor = Player;
 
+/**
+ * Display current game level and Player health on screen.
+ *    Display Game Over message when health reaches 0.
+ */
 Player.prototype.render = function() {
   Character.prototype.render.call(this);
   if (this.health > 0) {
@@ -156,6 +168,14 @@ Player.prototype.render = function() {
   }
 }
 
+/**
+ * Checks for collisions with health packs and lasers. If 
+ *    the player picks up a health pack, then health is
+ *    increased by 1. If the player is hit by a laser then
+ *    health is reduced by 1 and player's appearance changes.
+ *    If player reaches the safe zone, then the level increases.
+ * @param {number} dt is a time delta between ticks.
+ */
 Player.prototype.update = function(dt) {
   var collides = this.handleCollisions();
 
@@ -197,6 +217,9 @@ Player.prototype.update = function(dt) {
   }
 }
 
+/**
+ * Check to see if player has reached the safe zone.
+ */
 Player.prototype.safeZone = function() {
   if (this.y < 50) {
     return true;
@@ -204,6 +227,9 @@ Player.prototype.safeZone = function() {
   return false;
 }
 
+/**
+ * Check to see if player has been hit by a laser.
+ */
 Player.prototype.handleCollisions = function() {
   for (i in allEnemies) {
    if (player.x < allEnemies[i].x + allEnemies[i].width &&
@@ -216,6 +242,9 @@ Player.prototype.handleCollisions = function() {
   return false;
 }
 
+/**
+ * Check to see if player has collided with health pack.
+ */
 Player.prototype.healthPackCollection = function() {
   for (i in healthPack) {
     if (player.x < healthPack.x + healthPack.width &&
@@ -228,7 +257,9 @@ Player.prototype.healthPackCollection = function() {
   return false;
 }
 
-
+/**
+ * Define the movement of the Player.
+ */
 Player.prototype.move = function(movement) {
   switch(movement) {
     case 'left':
@@ -247,7 +278,10 @@ Player.prototype.move = function(movement) {
       break;
   }
 }
-//Referenced KevDonk's handleInput prototype to keep player in bounds
+
+/**
+ * Handle's the Player's movement via input from the keyboard.
+ */
 Player.prototype.handleInput = function(keydown) {
   if(keydown == 'right' && this.x < 400) {
     this.move('right');
@@ -285,10 +319,12 @@ var Repair = function() {
 };
 
 Repair.prototype = Object.create(Character.prototype);
-Repair.prototype.constructor = Player;
+Repair.prototype.constructor = Repair;
 
+/**
+ * Returns a random position for the health pack to appear.
+ */
 Repair.prototype.getRandomX = function() {
-    // Get valid random index for ENEMY_X_STARTS array
     var len = HEALTH_X_STARTS.length;
     var rand = getRandomInt(0, len);
 
@@ -308,11 +344,15 @@ Repair.prototype.reset = function() {
   this.y = 151;
 }
 
+/**
+ * Instantiate the objects that appear in the game
+ */
 var healthPack = new Repair();
 var player = new Player();
 var allEnemies = [new Enemy(), new Enemy(), new Enemy(), new Enemy()];
 
-/** Listens for key presses and sends the keys to the
+/** 
+ * Listens for key presses and sends the keys to the
  *      Player.handleInput() method.
  */
 document.addEventListener('keyup', function(e) {
