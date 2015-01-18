@@ -1,0 +1,21 @@
+References:
+
+1. http://www.html5rocks.com/en/tutorials/canvas/notearsgame/
+
+  Referenced this when working on collision detection.
+
+2. https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+
+  Used this to get a random integer function.
+
+3. https://github.com/JColuch/Web-HTML5Game-FroggerClone
+
+  Referenced this git repository for its system of generating random enemy starting locations.
+
+4. https://github.com/kevdonk/frontend-nanodegree-arcade-game
+
+  Referenced this git repository for general structure.
+
+5. https://github.com/haopei/frontend-nanodegree-arcade-game/tree/gh-pages
+
+  Referenced this git repository for general structure.
