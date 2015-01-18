@@ -1,6 +1,23 @@
 frontend-nanodegree-arcade-game
 ===============================
 
-Students should use this rubric: https://www.udacity.com/course/viewer#!/c-ud015/l-3072058665/m-3072588797
+Welcome to my version of the classic Frogger arcade game.
 
-for self-checking their submission.
+The goal is to avoid the lasers and move the Robot character from the red zone
+at the botom of the screen to the orange zone at the top of the screen. 
+
+As you progress through the levels the speed of the lasers will increase.
+
+Health packs that spawn on the last row can be collected to increase the health
+of the Robot.
+
+Controls:
+
+  Move left - left arrow key
+  Move right - right arrow key
+  Move up - up arrow key
+  Move down - down arrow key
+
+  Refresh the page to reset the game.
+
+Thanks for playing!
