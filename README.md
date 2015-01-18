@@ -4,7 +4,7 @@ frontend-nanodegree-arcade-game
 Welcome to my version of the classic Frogger arcade game.
 
 The goal is to avoid the lasers and move the Robot character from the red zone
-at the botom of the screen to the orange zone at the top of the screen. 
+at the bottom of the screen to the orange zone at the top of the screen. 
 
 As you progress through the levels the speed of the lasers will increase.
 
