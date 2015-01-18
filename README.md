@@ -13,10 +13,10 @@ of the Robot.
 
 Controls:
 
-  Move left - left arrow key  
-  Move right - right arrow key  
-  Move up - up arrow key  
-  Move down - down arrow key  
+  Move left - left arrow key<br>
+  Move right - right arrow key<br>
+  Move up - up arrow key<br>
+  Move down - down arrow key<br>  
 
   Refresh the page to reset the game.
 
