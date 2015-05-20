@@ -5,6 +5,14 @@
  * @const
  */
 
+/**
+ * TODO: Improvment to ARcade game: add an alert that displays instructions for
+ * the game. Also add an alert at the end that tell you to refresh the page to
+ * reset the game. Implement the recommended changes for the performance
+ * optimization thing
+ * Change name of title (tab label) for the arcade game 
+ */
+
 var STRIDE_LENGTH_X = 101,
     STRIDE_LENGTH_Y = 83,
     PLAYER_X_OFFSET = 17,
