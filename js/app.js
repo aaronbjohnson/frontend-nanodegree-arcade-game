@@ -26,6 +26,8 @@ var ENEMY_X_STARTS = [-300, -200, -100, -50],
 var HEALTH_X_STARTS = [34, 135, 236, 337, 438],
     HEALTH_Y_STARTS = 30;
 
+var NEW_LEVEL_AUDIO = new Audio("audio/newLevel.mp3");
+
 /**
  * Returns a random number between Enemy's minimum and maximum
  *    speeds.
@@ -221,6 +223,8 @@ Player.prototype.update = function(dt) {
   if (safe && this.health > 0) {
     this.reset();
     this.level++;
+    NEW_LEVEL_AUDIO.play();
+    NEW_LEVEL_AUDIO.currentTime=0;
     speedMultiplier++;
   }
 }
