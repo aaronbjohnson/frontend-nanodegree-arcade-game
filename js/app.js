@@ -26,7 +26,9 @@ var ENEMY_X_STARTS = [-300, -200, -100, -50],
 var HEALTH_X_STARTS = [34, 135, 236, 337, 438],
     HEALTH_Y_STARTS = 30;
 
-var NEW_LEVEL_AUDIO = new Audio("audio/newLevel.mp3");
+var NEW_LEVEL_AUDIO = new Audio("audio/newLevel.mp3"),
+    HIT_AUDIO = new Audio("audio/ouch.mp3"),
+    REPAIR_AUDIO = new Audio("audio/repairs.mp3");
 
 /**
  * Returns a random number between Enemy's minimum and maximum
@@ -191,6 +193,8 @@ Player.prototype.update = function(dt) {
 
   if (collides) {
     this.reset();
+    HIT_AUDIO.play();
+    HIT_AUDIO.currentTime=0;
     this.health--;
   }
 
@@ -198,6 +202,8 @@ Player.prototype.update = function(dt) {
 
   if (healthCollected) {
     this.health++;
+    REPAIR_AUDIO.play();
+    REPAIR_AUDIO.currentTime=0;
     healthPack.reset();
   }
 
