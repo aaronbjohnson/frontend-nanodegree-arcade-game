@@ -28,7 +28,8 @@ var HEALTH_X_STARTS = [34, 135, 236, 337, 438],
 
 var NEW_LEVEL_AUDIO = new Audio("audio/newLevel.mp3"),
     HIT_AUDIO = new Audio("audio/ouch.mp3"),
-    REPAIR_AUDIO = new Audio("audio/repairs.mp3");
+    REPAIR_AUDIO = new Audio("audio/repairs.mp3"),
+    LASER_AUDIO = new Audio("audio/pew.mp3");
 
 /**
  * Returns a random number between Enemy's minimum and maximum
@@ -109,6 +110,11 @@ Enemy.prototype.update = function(dt) {
 
   if (this.x > CANVAS_WIDTH) {
     this.reset();
+  }
+
+  if (this.x > -10 && this.x < 5) {
+    LASER_AUDIO.play();
+    LASER_AUDIO.currentTime=0;
   }
 }
 
