@@ -13,6 +13,34 @@
  * Change name of title (tab label) for the arcade game 
  */
 
+function welcomeScreen() {
+    var newLine = "\r\n"
+    var message = 'Welcome to Laser Dash! The goal is to avoid the lasers and ';
+        message += 'move the Robot character from the red zone at the bottom ';
+        message += 'of the screen to the orange zone at the top of the screen.';
+        message += newLine + newLine;
+        message += 'As you progress through the levels the speed of the lasers will increase.';
+        message += newLine + newLine;
+        message += 'Health packs that spawn on the last row can be collected to increase the health of the Robot.';
+        message += newLine + newLine;
+        message += 'Controls:';
+        message += newLine;
+        message += 'Move left - left arrow key';
+        message += newLine;
+        message += 'Move right - right arrow key';
+        message += newLine;
+        message += 'Move up - up arrow key';
+        message += newLine;
+        message += 'Move down - down arrow key';
+        message += newLine + newLine;
+        message += 'Refresh the page to reset the game.';
+        message += newLine + newLine;
+        message += 'Thanks for playing!';
+
+    alert(message);
+}
+window.onload = welcomeScreen;
+
 var STRIDE_LENGTH_X = 101,
     STRIDE_LENGTH_Y = 83,
     PLAYER_X_OFFSET = 17,
