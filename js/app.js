@@ -36,15 +36,15 @@ var NEW_LEVEL_AUDIO = new Audio("audio/newLevel.mp3"),
  *    speeds.
  */
 var SPEED_VARIATION = function() {
-  return getRandomInt(ENEMY_MIN_SPEED, ENEMY_MAX_SPEED);
+    return getRandomInt(ENEMY_MIN_SPEED, ENEMY_MAX_SPEED);
 };
 
 /**
  * Clears the game board of lasers and health packs.
  */
 var gameOver = function() {
-  allEnemies = [];
-  healthPack = false;
+    allEnemies = [];
+    healthPack = false;
 };
 
 /**
@@ -67,7 +67,7 @@ var CANVAS_WIDTH = 505,
  * @return {number}
  */
 function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min)) + min;
+    return Math.floor(Math.random() * (max - min)) + min;
 }
 
 // Constructors
@@ -75,90 +75,90 @@ var Character = function() {
 };
 
 Character.prototype.render = function() {
-  ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-}
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
 
 /**
  * Create lasers that shoot across the screen. 
  * @constructor
  */
 var Enemy = function() {
-  this.active = true;
-  this.xVelocity = 2;
-  this.yVelocity = 0;
-  this.width = 99;
-  this.height = 30;
-  this.sprite = 'images/laser.png';
-  this.x = this.getRandomX();
-  this.y = this.getRandomY();
+    this.active = true;
+    this.xVelocity = 2;
+    this.yVelocity = 0;
+    this.width = 99;
+    this.height = 30;
+    this.sprite = 'images/laser.png';
+    this.x = this.getRandomX();
+    this.y = this.getRandomY();
 };
 
 Enemy.prototype = Object.create(Character.prototype); 
 Enemy.prototype.constructor = Enemy;
 
 Enemy.prototype.render = function() {
-  Character.prototype.render.call(this);
-}
+    Character.prototype.render.call(this);
+};
 
 /**
  * Update the enemy's position, required method for game.
  * @param {number} dt is a time delta between ticks.
  */
 Enemy.prototype.update = function(dt) {
-  this.x += this.xVelocity * dt * 100 + speedMultiplier;
-  this.y += this.yVelocity * dt * 100;
+    this.x += this.xVelocity * dt * 100 + speedMultiplier;
+    this.y += this.yVelocity * dt * 100;
 
-  if (this.x > CANVAS_WIDTH) {
-    this.reset();
-  }
+    if (this.x > CANVAS_WIDTH) {
+        this.reset();
+    }
 
-  if (this.x > -10 && this.x < 5) {
-    LASER_AUDIO.play();
-    LASER_AUDIO.currentTime=0;
-  }
-}
+    if (this.x > -10 && this.x < 5) {
+        LASER_AUDIO.play();
+        LASER_AUDIO.currentTime=0;
+    }
+};
 
 /**
  * Resets the laser's position.
  */
 Enemy.prototype.reset = function() {
-  this.x = this.getRandomX();
-  this.y = this.getRandomY();
-  this.xVelocity = SPEED_VARIATION();
-}
+    this.x = this.getRandomX();
+    this.y = this.getRandomY();
+    this.xVelocity = SPEED_VARIATION();
+};
 
 
 /**
  * Referenced https://github.com/JColuch/Web-HTML5Game-FroggerClone
- *    for this system of finding a random starting position for the 
- *    lasers.
+ * for this system of finding a random starting position for the 
+ * lasers.
  */
 Enemy.prototype.getRandomX = function() {
     var len = ENEMY_X_STARTS.length;
     var rand = getRandomInt(0, len);
 
     return ENEMY_X_STARTS[rand];
-}
+};
 
 Enemy.prototype.getRandomY = function() {
     var len = ENEMY_Y_STARTS.length;
     var rand = getRandomInt(0, len);
 
     return ENEMY_Y_STARTS[rand];
-}
+};
 
 /**
 * Create the Robot Hero that moves across the board.
 * @constructor
 */
 var Player = function() {
-  this.sprite = 'images/robot3.png';
-  this.x = (STRIDE_LENGTH_X * 2) + PLAYER_X_OFFSET;
-  this.y = (STRIDE_LENGTH_Y * 4) + PLAYER_Y_OFFSET;
-  this.width = 67;
-  this.height = 88;
-  this.health = 3;
-  this.level = 1;
+    this.sprite = 'images/robot3.png';
+    this.x = (STRIDE_LENGTH_X * 2) + PLAYER_X_OFFSET;
+    this.y = (STRIDE_LENGTH_Y * 4) + PLAYER_Y_OFFSET;
+    this.width = 67;
+    this.height = 88;
+    this.health = 3;
+    this.level = 1;
 };
 
 Player.prototype = Object.create(Character.prototype);
@@ -166,168 +166,168 @@ Player.prototype.constructor = Player;
 
 /**
  * Display current game level and Player health on screen.
- *    Display Game Over message when health reaches 0.
+ * Display Game Over message when health reaches 0.
  */
 Player.prototype.render = function() {
-  Character.prototype.render.call(this);
-  if (this.health > 0) {
-    ctx.fillStyle = "#111111";
-    ctx.font = "Bold 18px Helvetica";
-    ctx.fillText("Level: " + this.level, 15, 575);
-    ctx.fillText("Health: " + this.health, 415, 575);
-  }
+    Character.prototype.render.call(this);
+        if (this.health > 0) {
+        ctx.fillStyle = "#111111";
+        ctx.font = "Bold 18px Helvetica";
+        ctx.fillText("Level: " + this.level, 15, 575);
+        ctx.fillText("Health: " + this.health, 415, 575);
+    }
 
-  if (this.health == 0) {
-    ctx.fillStyle = "#FFFFFF";
-    ctx.font = "Bold 30px Helvetica";
-    ctx.fillText("GAME OVER", 155, 185);
-    ctx.fillText("You reached level " + this.level, 115, 265);
-    ctx.fillText("Refresh to reset", 138, 345);
-  }
-}
+    if (this.health === 0) {
+        ctx.fillStyle = "#FFFFFF";
+        ctx.font = "Bold 30px Helvetica";
+        ctx.fillText("GAME OVER", 155, 185);
+        ctx.fillText("You reached level " + this.level, 115, 265);
+        ctx.fillText("Refresh to reset", 138, 345);
+    }
+};
 
 /**
  * Checks for collisions with health packs and lasers. If 
- *    the player picks up a health pack, then health is
- *    increased by 1. If the player is hit by a laser then
- *    health is reduced by 1 and player's appearance changes.
- *    If player reaches the safe zone, then the level increases.
+ * the player picks up a health pack, then health is
+ * increased by 1. If the player is hit by a laser then
+ * health is reduced by 1 and player's appearance changes.
+ * If player reaches the safe zone, then the level increases.
  * @param {number} dt is a time delta between ticks.
  */
 Player.prototype.update = function(dt) {
-  var collides = this.handleCollisions();
+    var collides = this.handleCollisions();
 
-  if (collides) {
-    this.reset();
-    HIT_AUDIO.play();
-    HIT_AUDIO.currentTime=0;
-    this.health--;
-  }
+    if (collides) {
+        this.reset();
+        HIT_AUDIO.play();
+        HIT_AUDIO.currentTime=0;
+        this.health--;
+    }
 
-  var healthCollected = this.healthPackCollection();
+    var healthCollected = this.healthPackCollection();
 
-  if (healthCollected) {
-    this.health++;
-    REPAIR_AUDIO.play();
-    REPAIR_AUDIO.currentTime=0;
-    healthPack.reset();
-  }
+    if (healthCollected) {
+        this.health++;
+        REPAIR_AUDIO.play();
+        REPAIR_AUDIO.currentTime=0;
+        healthPack.reset();
+    }
 
-  if (this.health == 0) {
-    gameOver();
-  }
+    if (this.health === 0) {
+        gameOver();
+    }
 
-  switch (this.health) {
-    case 1:
-      this.sprite = 'images/robot1.png';
-      break;
-    case 2:
-      this.sprite = 'images/robot2.png';
-      break;
-    case 3: 
-      this.sprite = 'images/robot3.png';
-    default:
-    break;
-  }
+    switch (this.health) {
+        case 1:
+            this.sprite = 'images/robot1.png';
+        break;
+        case 2:
+            this.sprite = 'images/robot2.png';
+        break;
+        case 3: 
+            this.sprite = 'images/robot3.png';
+        break;
+        default:
+    }
 
-  var safe = this.safeZone();
+    var safe = this.safeZone();
 
-  if (safe && this.health > 0) {
-    this.reset();
-    this.level++;
-    NEW_LEVEL_AUDIO.play();
-    NEW_LEVEL_AUDIO.currentTime=0;
-    speedMultiplier++;
-  }
-}
+    if (safe && this.health > 0) {
+        this.reset();
+        this.level++;
+        NEW_LEVEL_AUDIO.play();
+        NEW_LEVEL_AUDIO.currentTime=0;
+        speedMultiplier++;
+    }
+};
 
 /**
  * Check to see if player has reached the safe zone.
  */
 Player.prototype.safeZone = function() {
-  if (this.y < 50) {
-    return true;
-  }
-  return false;
-}
+    if (this.y < 50) {
+        return true;
+    }
+    return false;
+};
 
 /**
  * Check to see if player has been hit by a laser.
  */
 Player.prototype.handleCollisions = function() {
-  for (i in allEnemies) {
-   if (player.x < allEnemies[i].x + allEnemies[i].width &&
-    player.x + player.width > allEnemies[i].x &&
-    player.y < allEnemies[i].y + allEnemies[i].height &&
-    player.height + player.y > allEnemies[i].y) {
-      return true;
+    for (var i in allEnemies) {
+        if (player.x < allEnemies[i].x + allEnemies[i].width &&
+            player.x + player.width > allEnemies[i].x &&
+            player.y < allEnemies[i].y + allEnemies[i].height &&
+            player.height + player.y > allEnemies[i].y) {
+            return true;
+        }
     }
-  }
-  return false;
-}
+    return false;
+};
 
 /**
  * Check to see if player has collided with health pack.
  */
 Player.prototype.healthPackCollection = function() {
-  for (i in healthPack) {
-    if (player.x < healthPack.x + healthPack.width &&
-      player.x + player.width > healthPack.x &&
-      player.y < healthPack.y + healthPack.height &&
-      player.height + player.y > healthPack.y) {
+    for (var i in healthPack) {
+        if (player.x < healthPack.x + healthPack.width &&
+            player.x + player.width > healthPack.x &&
+            player.y < healthPack.y + healthPack.height &&
+            player.height + player.y > healthPack.y) {
         return true;
+        }
     }
-  }
-  return false;
-}
+    return false;
+};
 
 /**
  * Define the movement of the Player.
  */
 Player.prototype.move = function(movement) {
-  switch(movement) {
-    case 'left':
-      this.x -= STRIDE_LENGTH_X;
-      break;
-    case 'up':
-      this.y -= STRIDE_LENGTH_Y;
-      break;
-    case 'right':
-      this.x += STRIDE_LENGTH_X;
-      break;
-    case 'down':
-      this.y += STRIDE_LENGTH_Y;
-      break;
-    default:
-      break;
-  }
-}
+    switch(movement) {
+        case 'left':
+            this.x -= STRIDE_LENGTH_X;
+        break;
+        case 'up':
+            this.y -= STRIDE_LENGTH_Y;
+        break;
+        case 'right':
+            this.x += STRIDE_LENGTH_X;
+        break;
+        case 'down':
+            this.y += STRIDE_LENGTH_Y;
+        break;
+        default:
+        break;
+    }
+};
 
 /**
  * Handle's the Player's movement via input from the keyboard.
  */
 Player.prototype.handleInput = function(keydown) {
-  if(keydown == 'right' && this.x < 400) {
-    this.move('right');
-  }
+    if(keydown == 'right' && this.x < 400) {
+        this.move('right');
+    }
 
-  if(keydown == 'left' && this.x > 100) {
-    this.move('left');
-  }
+    if(keydown == 'left' && this.x > 100) {
+        this.move('left');
+    }
 
-  if(keydown == 'down' && this.y < 400) {
-    this.move('down');
-  }
+    if(keydown == 'down' && this.y < 400) {
+        this.move('down');
+    }
 
-  if(keydown == 'up' && this.y > 82) {
-    this.move('up');
-  }
-}
+    if(keydown == 'up' && this.y > 82) {
+        this.move('up');
+    }
+};
 
 Player.prototype.reset = function() {
-  this.x = (STRIDE_LENGTH_X * 2) + PLAYER_X_OFFSET;
-  this.y = (STRIDE_LENGTH_Y * 4) + PLAYER_Y_OFFSET;
-}
+    this.x = (STRIDE_LENGTH_X * 2) + PLAYER_X_OFFSET;
+    this.y = (STRIDE_LENGTH_Y * 4) + PLAYER_Y_OFFSET;
+};
 
 /**
  * Create health packs the the Player can collect in order
@@ -335,11 +335,11 @@ Player.prototype.reset = function() {
  * @constructor
  */
 var Repair = function() {
-  this.sprite = 'images/health-pack.png';
-  this.x = this.getRandomX();
-  this.y = 151;
-  this.width = 33;
-  this.height = 29;
+    this.sprite = 'images/health-pack.png';
+    this.x = this.getRandomX();
+    this.y = 151;
+    this.width = 33;
+    this.height = 29;
 };
 
 Repair.prototype = Object.create(Character.prototype);
@@ -353,20 +353,20 @@ Repair.prototype.getRandomX = function() {
     var rand = getRandomInt(0, len);
 
     return HEALTH_X_STARTS[rand];
-}
+};
 
 Repair.prototype.render = function() {
-  Character.prototype.render.call(this);
-}
+    Character.prototype.render.call(this);
+};
 
 Repair.prototype.update = function(dt) {
-  console.log(this.x);
-}
+    console.log(this.x);
+};
 
 Repair.prototype.reset = function() {
-  this.x = this.getRandomX();
-  this.y = 151;
-}
+    this.x = this.getRandomX();
+    this.y = 151;
+};
 
 /**
  * Instantiate the objects that appear in the game
@@ -377,7 +377,7 @@ var allEnemies = [new Enemy(), new Enemy(), new Enemy(), new Enemy()];
 
 /** 
  * Listens for key presses and sends the keys to the
- *      Player.handleInput() method.
+ * Player.handleInput() method.
  */
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {
