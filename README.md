@@ -19,5 +19,7 @@ Controls:
   Move down - down arrow key<br>  
 
   Refresh the page to reset the game.
+  
+Click [here](https://aaronbjohnson.github.io/frontend-nanodegree-arcade-game/) to play.
 
 Thanks for playing!
